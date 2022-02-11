@@ -19,7 +19,7 @@ namespace GroupProject_3037_.csengine
     
     public abstract class game
     {
-        private g2dvec windowSize = new g2dvec(960, 960);
+        private g2dvec windowSize = new g2dvec(560, 560);
         private string showTitleText;
         public Color Background =  Color.Black;
         private instanceGame thisGame = null;
@@ -28,17 +28,21 @@ namespace GroupProject_3037_.csengine
         private static List<g2dshape> gameShapes = new List<g2dshape>();
         private static List<g2dsprite> gameSprites = new List<g2dsprite>();
 
+        public g2dvec cameraView = g2dvec.zero();
+        public float cameraAngle = 0f;
         public game(g2dvec pixels, string name)
         {
             consoleLog.info("Game is starting. . .");
             this.windowSize = pixels;
             this.showTitleText = name;
-
+            
 
             thisGame = new instanceGame();
             thisGame.Size = new Size((int)windowSize.x, (int)windowSize.y);
             thisGame.Text = this.showTitleText;
             thisGame.Paint += renderer;
+            thisGame.KeyDown += thisGame_KeyDown;
+            thisGame.KeyUp += thisGame_KeyUp; 
             
 
             gamethread = new Thread(GameLoop);
@@ -56,16 +60,7 @@ namespace GroupProject_3037_.csengine
         {
             gameSprites.Add(sprite);
         }
-        private void Form1_FormClosing(Object sender, FormClosingEventArgs e)
-        {
-
-            System.Text.StringBuilder messageBoxCS = new System.Text.StringBuilder();
-            messageBoxCS.AppendFormat("{0} = {1}", "CloseReason", e.CloseReason);
-            messageBoxCS.AppendLine();
-            messageBoxCS.AppendFormat("{0} = {1}", "Cancel", e.Cancel);
-            messageBoxCS.AppendLine();
-            MessageBox.Show(messageBoxCS.ToString(), "FormClosing Event");
-        }
+        
 
         public static void registerShapes(g2dshape shape)
         {
@@ -75,6 +70,11 @@ namespace GroupProject_3037_.csengine
         {
             gameShapes.Remove(shape);
         }
+
+        private void thisGame_KeyUp(object sender, KeyEventArgs e) { getKeyUp(e); }
+        private void thisGame_KeyDown(object sender, KeyEventArgs e) { getKeyDown(e); }
+
+
         void GameLoop()
         {
             OnLoad();
@@ -101,6 +101,9 @@ namespace GroupProject_3037_.csengine
         {
             Graphics g = e.Graphics;
             g.Clear(Background);
+            
+            g.TranslateTransform(cameraView.x, cameraView.y);
+            g.RotateTransform(cameraAngle);
 
             foreach(g2dshape shape in gameShapes)
             {
@@ -114,8 +117,8 @@ namespace GroupProject_3037_.csengine
         }
         public abstract void OnLoad();
         public abstract void OnUpdate();
-
         public abstract void OnDraw();
-
+        public abstract void getKeyUp(KeyEventArgs e);
+        public abstract void getKeyDown(KeyEventArgs e);
     }
 }

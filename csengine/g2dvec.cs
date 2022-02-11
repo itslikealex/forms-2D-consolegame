@@ -25,7 +25,7 @@ namespace GroupProject_3037_.csengine
 
         public static g2dvec zero()
         {
-            return new g2dvec();
+            return new g2dvec(0,0);
         }
     }
 }
