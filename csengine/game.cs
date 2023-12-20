@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace GroupProject_3037_.csengine
+namespace FormsGame.csengine
 {
 
     class instanceGame : Form
