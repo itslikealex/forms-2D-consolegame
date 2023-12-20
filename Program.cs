@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GroupProject_3037_
+namespace FormsGame
 {
     class Program
     {
